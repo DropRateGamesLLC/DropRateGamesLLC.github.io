@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drop Rate Games</title>
+<meta name="description" content="Drop Rate Games — curated retail collectibles and trading cards, from vintage video games to Pokémon and Yu-Gi-Oh. Quality finds, fair prices, fast shipping.">
+<meta property="og:title" content="Drop Rate Games">
+<meta property="og:description" content="Curated collectibles and trading cards. Quality finds, fair prices, fast shipping.">
+<meta property="og:image" content="https://droprategames.net/logo.png">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  :root{
+    --bg:#000;
+    --panel:#0d0a14;
+    --line:#2a1f3d;
+    --text:#f4f1fa;
+    --muted:#a99cc4;
+    --purple:#8b5cf6;
+    --purple-hi:#a78bfa;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:#2e124e;color:var(--text)}
+  body{background:transparent;color:var(--text)}
+  body{
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:40px 16px;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-1;
+    background:linear-gradient(#22b3cc,#345ca0 55%,#2e124e);
+  }
+  #px{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+  .card{
+    width:100%;max-width:520px;background:#000;
+    border:3px solid #e9e6f0;border-radius:4px;
+    padding:28px 24px 24px;box-shadow:0 20px 60px rgba(0,0,0,.45);
+  }
+  main{width:100%;display:flex;flex-direction:column;align-items:center}
+  .logo{width:100%;max-width:440px;height:auto;display:block;mix-blend-mode:lighten}
+  .tagline{
+    margin:8px 0 28px;text-align:center;color:var(--muted);
+    font-size:1rem;line-height:1.55;max-width:400px;
+  }
+  .links{width:100%;display:flex;flex-direction:column;gap:12px}
+  .btn{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    width:100%;padding:16px 20px;border-radius:14px;
+    background:var(--panel);border:1px solid var(--line);
+    color:var(--text);text-decoration:none;font-weight:600;font-size:1.05rem;
+    transition:border-color .15s, transform .15s, background .15s;
+  }
+  a.btn:hover,a.btn:focus-visible{border-color:var(--purple-hi);background:#150f22;transform:translateY(-1px);outline:none}
+  .btn .sub{font-weight:500;font-size:.85rem;color:var(--muted)}
+  .btn .arrow{color:var(--purple-hi);font-size:1.2rem}
+  .btn.soon{opacity:.55;cursor:default}
+  .btn.soon .arrow{display:none}
+  .pill{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+        color:var(--purple-hi);border:1px solid var(--line);padding:4px 8px;border-radius:999px}
+  footer{margin-top:32px;text-align:center;color:var(--muted);font-size:.82rem;line-height:1.7}
+  footer a{color:var(--purple-hi);text-decoration:none}
+  footer a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<canvas id="px" aria-hidden="true"></canvas>
+<div class="card">
+<main>
+  <img class="logo" src="logo.webp" alt="Drop Rate Games logo" width="900" height="737">
+  <p class="tagline">Curated collectibles and trading cards — from vintage video games to Pokémon and Yu-Gi-Oh. Quality finds, fair prices, fast shipping.</p>
+
+  <nav class="links" aria-label="Shop Drop Rate Games">
+    <a class="btn" href="https://www.ebay.com/usr/droprategames" target="_blank" rel="noopener">
+      <span>Shop on eBay<br><span class="sub">Collectibles, cards &amp; games</span></span>
+      <span class="arrow">→</span>
+    </a>
+    <div class="btn soon">
+      <span>Amazon<br><span class="sub">Storefront launching soon</span></span>
+      <span class="pill">Soon</span>
+    </div>
+    <div class="btn soon">
+      <span>Walmart<br><span class="sub">Storefront launching soon</span></span>
+      <span class="pill">Soon</span>
+    </div>
+  </nav>
+</main>
+<footer>
+  <a href="mailto:cody@droprategames.net">cody@droprategames.net</a><br>
+  © 2026 Drop Rate Games LLC · Washougal, WA
+</footer>
+</div>
+<script>
+(()=>{
+  const c=document.getElementById('px'),x=c.getContext('2d');
+  const C=24, still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W,H,dpr;
+  function size(){dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0)}
+  function h(a,b){let n=(a*374761393+b*668265263)|0;n=(n^(n>>>13))*1274126177|0;return((n^(n>>>16))>>>0)/4294967296}
+  function draw(t){
+    x.clearRect(0,0,W,H);
+    const off=still?0:t*0.012;               // slow upward drift (px per ms)
+    const r0=Math.floor(off/C), shift=off-r0*C;
+    for(let r=0;r<=Math.ceil(H/C)+1;r++){
+      const y=r*C-shift, ty=y/H, row=r+r0;
+      const dens=Math.max(0,ty-0.12)*0.6;     // more squares toward the bottom
+      for(let col=0;col*C<W;col++){
+        const k=h(col,row); if(k>dens) continue;
+        const ph=h(row,col)*6.283, sp=0.0006+h(col+7,row)*0.0012;
+        const tw=still?1:0.55+0.45*Math.sin(t*sp+ph); // twinkle
+        const a=(0.05+h(col,row+3)*0.12)*tw;
+        x.fillStyle=h(col+1,row)<0.62?`rgba(255,255,255,${a})`:`rgba(0,0,0,${a+0.04})`;
+        x.fillRect(col*C,y,C,C);
+      }
+    }
+    if(!still) requestAnimationFrame(draw);
+  }
+  addEventListener('resize',size);size();requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
